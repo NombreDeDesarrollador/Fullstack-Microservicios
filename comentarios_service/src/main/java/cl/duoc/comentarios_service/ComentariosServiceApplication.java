@@ -1,0 +1,13 @@
+package cl.duoc.comentarios_service;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ComentariosServiceApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ComentariosServiceApplication.class, args);
+	}
+
+}

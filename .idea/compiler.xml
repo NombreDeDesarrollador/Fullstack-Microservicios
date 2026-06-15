@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="eureka-server" />
+        <module name="gateway" />
+      </profile>
+      <profile name="Annotation profile for trabajos_service" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.46/lombok-1.18.46.jar" />
+        </processorPath>
+        <module name="notas_service" />
+        <module name="integrantes_service" />
+        <module name="secciones_service" />
+        <module name="roles_service" />
+        <module name="profesores_service" />
+        <module name="asignaturas_service" />
+        <module name="trabajos_service" />
+        <module name="entregas_service" />
+        <module name="comentarios_service" />
+        <module name="grupos_service" />
+      </profile>
+    </annotationProcessing>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="asignaturas_service" options="-parameters" />
+      <module name="comentarios_service" options="-parameters" />
+      <module name="entregas_service" options="-parameters" />
+      <module name="eureka-server" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="grupos_service" options="-parameters" />
+      <module name="integrantes_service" options="-parameters" />
+      <module name="notas_service" options="-parameters" />
+      <module name="profesores_service" options="-parameters" />
+      <module name="roles_service" options="-parameters" />
+      <module name="secciones_service" options="-parameters" />
+      <module name="trabajos_service" options="-parameters" />
+    </option>
+  </component>
+</project>

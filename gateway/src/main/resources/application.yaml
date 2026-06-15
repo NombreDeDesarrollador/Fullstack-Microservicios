@@ -1,0 +1,25 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: integrantes
+            uri: http://localhost:8087
+            predicates:
+              - Path=/api/v1/integrantes/**
+
+          - id: grupos
+            uri: http://localhost:8086
+            predicates:
+              - Path=/api/v1/grupos/**
+
+          - id: asignaturas
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/v1/asignaturas/**
