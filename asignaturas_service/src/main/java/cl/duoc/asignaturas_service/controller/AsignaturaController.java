@@ -4,6 +4,7 @@ import cl.duoc.asignaturas_service.dto.AsignaturaDTO;
 import cl.duoc.asignaturas_service.dto.AsignaturaSeccionDTO;
 import cl.duoc.asignaturas_service.model.Asignatura;
 import cl.duoc.asignaturas_service.service.AsignaturaService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.hateoas.Link;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import java.util.Optional;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Tag(name = "Asignaturas", description = "Operaciones relacionadas con la gestión de asignaturas")
 @RestController
 @RequestMapping("/api/v1/asignaturas")
 public class AsignaturaController {

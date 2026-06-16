@@ -3,16 +3,16 @@ package cl.duoc.integrantes_service.controller;
 import cl.duoc.integrantes_service.dto.IntegranteRolDTO;
 import cl.duoc.integrantes_service.model.Integrante;
 import cl.duoc.integrantes_service.service.IntegranteService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.EntityModel;
 
 
 import java.util.List;

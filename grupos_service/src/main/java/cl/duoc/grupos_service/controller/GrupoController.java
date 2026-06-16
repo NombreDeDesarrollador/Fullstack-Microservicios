@@ -5,6 +5,7 @@ import cl.duoc.grupos_service.dto.GrupoTrabajoDTO;
 import cl.duoc.grupos_service.model.Grupo;
 import cl.duoc.grupos_service.service.GrupoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -18,6 +19,7 @@ import java.util.Optional;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+@Tag(name = "Grupos", description = "Operaciones relacionadas con la gestión de grupos")
 @RestController
 @RequestMapping("api/v1/grupos")
 public class GrupoController {
