@@ -4,13 +4,19 @@ import cl.duoc.grupos_service.dto.GrupoIntegranteDTO;
 import cl.duoc.grupos_service.dto.GrupoTrabajoDTO;
 import cl.duoc.grupos_service.model.Grupo;
 import cl.duoc.grupos_service.service.GrupoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("api/v1/grupos")
@@ -20,7 +26,7 @@ public class GrupoController {
     private GrupoService grupoService;
 
     @GetMapping
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<?> obtenerGrupos() {
         List<Grupo> grupos = grupoService.obtenerGrupos();
         if (grupos.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay grupo");
@@ -28,14 +34,40 @@ public class GrupoController {
         return ResponseEntity.ok(grupos);
     }
 
+    @Operation(summary = "Obtiene un grupo por su id ", description = "Retorna la informacios de un grupo específico por su ID")
     @GetMapping("/{id}")
+    public EntityModel<Grupo> obtenerGrupo(@PathVariable Integer id){
+        Grupo grupo = grupoService.buscarGrupoPorId(id).orElseThrow();
+        EntityModel<Grupo> model = EntityModel.of(grupo);
+
+        model.add(
+                linkTo(
+                        methodOn(GrupoController.class).obtenerGrupo(id)
+                ).withSelfRel()
+        );
+
+        model.add(
+                Link.of("http://localhost:8086" +
+                        "/api/v1/grupos" + id, "eliminar")
+        );
+
+        model.add(
+                linkTo(
+                        methodOn(GrupoController.class)
+                                .obtenerGrupos()
+                ).withRel("todos-los grupos")
+        );
+        return model;
+    }
+
+    /*@GetMapping("/{id}")
     public ResponseEntity<?> obtenerGrupoPorId(@PathVariable Integer id) {
         Optional<Grupo> grupo = grupoService.obtenerGrupoPorId(id);
         if (grupo.isPresent()) {
             return ResponseEntity.ok(grupo.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe grupo con el ID "+ id);
-    }
+    }*/
 
     @PostMapping
     public Grupo crearGrupo(@RequestBody Grupo grupo) {

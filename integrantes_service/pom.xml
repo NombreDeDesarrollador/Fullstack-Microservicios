@@ -30,7 +30,6 @@
 		<java.version>17</java.version>
 	</properties>
 
-	<!--    BOM obligatorio    -->
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
@@ -42,7 +41,6 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
-	<!--  -  -  -  -  -  -  -  -  -->
 
 	<dependencies>
 		<dependency>
@@ -87,19 +85,18 @@
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!--Dependencias HATEOAS-->
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 
-		<!--Dependencia OpenApi (swagger)-->
 		<dependency>
 			<groupId>org.springdoc</groupId>
 			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 			<version>3.0.2</version>
 		</dependency>
-		<!--Dependencia Datafaker-->
+
 		<dependency>
 			<groupId>net.datafaker</groupId>
 			<artifactId>datafaker</artifactId>
@@ -120,7 +117,6 @@
 			<artifactId>flyway-mysql</artifactId>
 		</dependency>
 
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -130,16 +126,14 @@
 			<artifactId>spring-webflux</artifactId>
 		</dependency>
 
-		<!--    DEPENDENCIAS EUREKA    -->
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		<!--  -  -  -  -  -  -  -  -  -->
 	</dependencies>
 
 	<build>

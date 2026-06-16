@@ -26,7 +26,7 @@ public class GrupoService {
         return grupoRepository.findAll();
     }
 
-    public Optional<Grupo> obtenerGrupoPorId(Integer id) {
+    public Optional<Grupo> buscarGrupoPorId(Integer id) {
         return grupoRepository.findById(id);
     }
 
