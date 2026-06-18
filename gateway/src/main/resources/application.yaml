@@ -9,20 +9,6 @@ spring:
     gateway:
       mvc:
         routes:
-          - id: integrantes
-            uri: http://localhost:8087
-            predicates:
-              - Path=/api/v1/integrantes/**
-
-          - id: grupos
-            uri: http://localhost:8086
-            predicates:
-              - Path=/api/v1/grupos/**
-
-          - id: asignaturas
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/v1/asignaturas/**
 
           - id: notas
             uri: http://localhost:8083
@@ -33,3 +19,23 @@ spring:
             uri: http://localhost:8083
             predicates:
               - Path=/api/v1/ponderaciones/**
+
+          - id: asignaturas
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/v1/asignaturas/**
+
+          - id: unidades
+            uri: http://localhost:8084
+            predicates:
+              - Path=/api/v1/unidades/**
+
+          - id: grupos
+            uri: http://localhost:8086
+            predicates:
+              - Path=/api/v1/grupos/**
+
+          - id: integrantes
+            uri: http://localhost:8087
+            predicates:
+              - Path=/api/v1/integrantes/**

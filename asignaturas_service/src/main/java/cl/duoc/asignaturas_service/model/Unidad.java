@@ -13,14 +13,14 @@ public class Unidad {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idUnidad")
-    private Integer idUnidad; // Cambiado de int a Integer
+    private Integer idUnidad;
 
     @Column(name = "idAsignatura")
-    @NotNull(message = "el ID de la asignatura es obligatorio") // Cambiado de int a Integer para que valide nulidad
+    @NotNull(message = "el ID de la asignatura es obligatorio")
     private Integer idAsignatura;
 
     @Column(name = "numeroUnidad")
-    @NotNull(message = "el número de la unidad es obligatorio") // Cambiado de int a Integer para que valide nulidad
+    @NotNull(message = "el número de la unidad es obligatorio")
     private Integer numeroUnidad;
 
     @Column(name = "nombreUnidad")

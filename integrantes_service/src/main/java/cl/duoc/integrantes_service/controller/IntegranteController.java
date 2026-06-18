@@ -17,6 +17,7 @@ import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
 import java.util.Optional;
+
 @Tag(name = "Integrantes", description = "Operaciones relacionadas con la gestión de integrantes")
 @RestController
 @RequestMapping("api/v1/integrantes")

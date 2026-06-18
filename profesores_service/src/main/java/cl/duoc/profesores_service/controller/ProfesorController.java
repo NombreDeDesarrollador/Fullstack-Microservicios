@@ -8,10 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Profesores", description = "Operaciones relacionadas con la gestión de profesores")
 @RestController
 @RequestMapping("/api/v1/profesores")
 public class ProfesorController {
@@ -20,7 +27,7 @@ public class ProfesorController {
     private ProfesorService profesorService;
 
     @GetMapping
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<?> obtenerProfesores() {
         List<Profesor> profesores = profesorService.obtenerProfesores();
         if (profesores.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay profesores");
@@ -28,7 +35,33 @@ public class ProfesorController {
         return ResponseEntity.ok(profesores);
     }
 
+    @Operation(summary = "Obtiene un profesor por su id ", description = "Retorna la informacios de un profesor específico por su ID")
     @GetMapping("/{id}")
+    public EntityModel<Profesor> obtenerProfesor(@PathVariable Integer id){
+        Profesor profesor = profesorService.buscarProfesorPorId(id).orElseThrow();
+        EntityModel<Profesor> model = EntityModel.of(profesor);
+
+        model.add(
+                linkTo(
+                        methodOn(ProfesorController.class).obtenerProfesor(id)
+                ).withSelfRel()
+        );
+
+        model.add(
+                Link.of("http://localhost:8085" +
+                        "/api/v1/profesores" + id, "eliminar")
+        );
+
+        model.add(
+                linkTo(
+                        methodOn(ProfesorController.class)
+                                .obtenerProfesores()
+                ).withRel("todos-los profesores")
+        );
+        return model;
+    }
+
+    /*@GetMapping("/{id}")
     public ResponseEntity<?> obtenerProfesorPorId(@PathVariable Integer id) {
         Optional<Profesor> profesorOptional = profesorService.buscarProfesorPorId(id);
 
@@ -38,7 +71,7 @@ public class ProfesorController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body("No existe el profesor con el ID: " + id);
         }
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<Profesor> crearProfesor(@RequestBody @Valid Profesor profesor) {
