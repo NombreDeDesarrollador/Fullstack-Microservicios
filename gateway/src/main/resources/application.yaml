@@ -30,6 +30,11 @@ spring:
             predicates:
               - Path=/api/v1/unidades/**
 
+          - id: profesores
+            uri: http://localhost:8085
+            predicates:
+              - Path=/api/v1/profesores/**
+
           - id: grupos
             uri: http://localhost:8086
             predicates:
