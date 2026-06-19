@@ -6,6 +6,7 @@ import cl.duoc.grupos_service.model.Grupo;
 import cl.duoc.grupos_service.service.GrupoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.Link;
@@ -72,8 +73,8 @@ public class GrupoController {
     }*/
 
     @PostMapping
-    public Grupo crearGrupo(@RequestBody Grupo grupo) {
-        return grupoService.guardarGrupo(grupo);
+    public ResponseEntity<Grupo> crearGrupo(@RequestBody @Valid Grupo grupo) {
+        return ResponseEntity.ok(grupoService.guardarGrupo(grupo));
     }
 
     @PutMapping("/{id}")

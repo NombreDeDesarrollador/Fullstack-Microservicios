@@ -73,7 +73,7 @@ public class UnidadController {
     }*/
 
     @PostMapping
-    public ResponseEntity<Unidad> crearUnidad(@RequestBody @Valid Unidad unidad){
+    public ResponseEntity<Unidad> crearUnidad(@RequestBody @Valid Unidad unidad) {
         return ResponseEntity.ok(unidadservice.guardarUnidad(unidad));
     }
 

@@ -73,7 +73,7 @@ public class SeccionController {
     }*/
 
     @PostMapping
-    public ResponseEntity<Seccion> guardarSeccion(@RequestBody @Valid Seccion seccion) {
+    public ResponseEntity<Seccion> crearSeccion(@RequestBody @Valid Seccion seccion) {
         return ResponseEntity.ok(seccionService.guardarSeccion(seccion));
     }
 

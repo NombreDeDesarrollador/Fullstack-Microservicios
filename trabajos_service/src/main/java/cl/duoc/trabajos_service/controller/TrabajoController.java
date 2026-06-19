@@ -2,6 +2,7 @@ package cl.duoc.trabajos_service.controller;
 
 import cl.duoc.trabajos_service.model.Trabajo;
 import cl.duoc.trabajos_service.service.TrabajoService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,8 +70,8 @@ public class TrabajoController {
     }*/
 
     @PostMapping
-    public Trabajo crear(@RequestBody Trabajo trabajo) {
-        return trabajoService.guardarTrabajo(trabajo);
+    public ResponseEntity<Trabajo> crearTrabajo(@RequestBody @Valid Trabajo trabajo) {
+        return ResponseEntity.ok(trabajoService.guardarTrabajo(trabajo));
     }
 
     @PutMapping("/{id}")

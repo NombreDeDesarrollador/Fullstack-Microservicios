@@ -75,7 +75,7 @@ public class NotaController {
 
 
     @PostMapping
-    public ResponseEntity<Nota> guardarNota(@RequestBody @Valid Nota nota) {
+    public ResponseEntity<Nota> crearNota(@RequestBody @Valid Nota nota) {
         return ResponseEntity.ok(notaService.guardarNota(nota));
     }
 

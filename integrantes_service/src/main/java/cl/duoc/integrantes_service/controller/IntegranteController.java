@@ -3,6 +3,7 @@ package cl.duoc.integrantes_service.controller;
 import cl.duoc.integrantes_service.dto.IntegranteRolDTO;
 import cl.duoc.integrantes_service.model.Integrante;
 import cl.duoc.integrantes_service.service.IntegranteService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,8 +71,8 @@ public class IntegranteController {
     //}
 
     @PostMapping
-    public Integrante crearIntegrante(@RequestBody Integrante integrante) {
-        return integranteService.guardarIntegrante(integrante);
+    public ResponseEntity<?> crearIntegrante(@Valid @RequestBody Integrante integrante) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(integranteService.guardarIntegrante(integrante));
     }
 
     @PutMapping("/{id}")

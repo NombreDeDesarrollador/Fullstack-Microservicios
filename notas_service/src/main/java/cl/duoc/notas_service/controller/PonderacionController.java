@@ -75,7 +75,7 @@ public class PonderacionController {
     }
 
     @PostMapping
-    public ResponseEntity<Ponderacion> guardarPonderacion(@RequestBody @Valid Ponderacion ponderacion) {
+    public ResponseEntity<Ponderacion> crearPonderacion(@RequestBody @Valid Ponderacion ponderacion) {
         return ResponseEntity.ok(ponderacionService.guardarPonderacion(ponderacion));
     }
 

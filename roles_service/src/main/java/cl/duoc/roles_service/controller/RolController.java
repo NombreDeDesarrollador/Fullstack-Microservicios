@@ -2,6 +2,7 @@ package cl.duoc.roles_service.controller;
 
 import cl.duoc.roles_service.model.Rol;
 import cl.duoc.roles_service.service.RolService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -69,8 +70,8 @@ public class RolController {
     }*/
 
     @PostMapping
-    public Rol crearRol(@RequestBody Rol rol) {
-        return rolService.guardar(rol);
+    public ResponseEntity<Rol> crearRol(@RequestBody @Valid Rol rol) {
+        return ResponseEntity.ok(rolService.guardar(rol));
     }
 
     @PutMapping("/{id}")

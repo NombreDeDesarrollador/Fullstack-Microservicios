@@ -77,7 +77,7 @@ public class AsignaturaController {
     }
 */
     @PostMapping
-    public ResponseEntity<Asignatura> guardarAsignatura(@RequestBody @Valid Asignatura asignatura) {
+    public ResponseEntity<Asignatura> crearAsignatura(@RequestBody @Valid Asignatura asignatura) {
         return ResponseEntity.ok(asignaturaService.guardarAsignatura(asignatura));
     }
 
