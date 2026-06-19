@@ -5,6 +5,8 @@ import cl.duoc.grupos_service.dto.GrupoTrabajoDTO;
 import cl.duoc.grupos_service.model.Grupo;
 import cl.duoc.grupos_service.service.GrupoService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +31,10 @@ public class GrupoController {
     private GrupoService grupoService;
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron grupos")
+    })
     public ResponseEntity<?> obtenerGrupos() {
         List<Grupo> grupos = grupoService.obtenerGrupos();
         if (grupos.isEmpty()) {
@@ -38,6 +44,7 @@ public class GrupoController {
     }
 
     @Operation(summary = "Obtiene un grupo por su id ", description = "Retorna la informacios de un grupo específico por su ID")
+
     @GetMapping("/{id}")
     public EntityModel<Grupo> obtenerGrupo(@PathVariable Integer id){
         Grupo grupo = grupoService.buscarGrupoPorId(id).orElseThrow();
@@ -97,6 +104,7 @@ public class GrupoController {
     }
 
     @GetMapping("/{idGrupo}/con-integrantes")
+    
     public ResponseEntity<GrupoIntegranteDTO> getGrupoConIntegrantes(
             @PathVariable Integer idGrupo) {
         GrupoIntegranteDTO dto = grupoService.obtenerGrupoConIntegrantes(idGrupo);
