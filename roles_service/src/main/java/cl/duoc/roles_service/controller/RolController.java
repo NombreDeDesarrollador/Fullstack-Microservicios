@@ -6,10 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Roles", description = "Operaciones relacionadas con la gestión de roles")
 @RestController
 @RequestMapping("api/v1/roles")
 public class RolController {
@@ -18,7 +25,7 @@ public class RolController {
     private RolService rolService;
 
     @GetMapping
-    public ResponseEntity<?> listar() {
+    public ResponseEntity<?> obtenerRoles() {
         List<Rol> roles = rolService.listarTodos();
         if (roles.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hay roles");
@@ -26,14 +33,40 @@ public class RolController {
         return ResponseEntity.ok(roles);
     }
 
+    @Operation(summary = "Obtiene un rol por su id ", description = "Retorna la informacion de un rol específico por su ID")
     @GetMapping("/{id}")
+    public EntityModel<Rol> obtenerRol(@PathVariable Integer id){
+        Rol rol = rolService.buscarRolPorId(id).orElseThrow();
+        EntityModel<Rol> model = EntityModel.of(rol);
+
+        model.add(
+                linkTo(
+                        methodOn(RolController.class).obtenerRol(id)
+                ).withSelfRel()
+        );
+
+        model.add(
+                Link.of("http://localhost:8088" +
+                        "/api/v1/roles" + id, "eliminar")
+        );
+
+        model.add(
+                linkTo(
+                        methodOn(RolController.class)
+                                .obtenerRoles()
+                ).withRel("todos-los roles")
+        );
+        return model;
+    }
+
+    /*@GetMapping("/{id}")
     public ResponseEntity<?> obtenerRolPorId(@PathVariable int id) {
         Optional<Rol> rol = rolService.buscarPorId(id);
         if (rol.isPresent()) {
             return ResponseEntity.ok(rol.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no existe un rol con el id " + id);
-    }
+    }*/
 
     @PostMapping
     public Rol crearRol(@RequestBody Rol rol) {

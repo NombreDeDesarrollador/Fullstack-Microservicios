@@ -8,10 +8,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.EntityModel;
 
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name = "Secciones", description = "Operaciones relacionadas con la gestión de secciones")
 @RestController
 @RequestMapping("/api/v1/secciones")
 public class SeccionController {
@@ -29,7 +36,33 @@ public class SeccionController {
             return ResponseEntity.ok(secciones);
     }
 
+    @Operation(summary = "Obtiene una seccion por su id ", description = "Retorna la informacios de una seccion específico por su ID")
     @GetMapping("/{id}")
+    public EntityModel<Seccion> obtenerSeccion(@PathVariable Integer id){
+        Seccion seccion = seccionService.buscarSeccionPorId(id).orElseThrow();
+        EntityModel<Seccion> model = EntityModel.of(seccion);
+
+        model.add(
+                linkTo(
+                        methodOn(SeccionController.class).obtenerSeccion(id)
+                ).withSelfRel()
+        );
+
+        model.add(
+                Link.of("http://localhost:8089" +
+                        "/api/v1/secciones" + id, "eliminar")
+        );
+
+        model.add(
+                linkTo(
+                        methodOn(SeccionController.class)
+                                .obtenerSecciones()
+                ).withRel("todos-los secciones")
+        );
+        return model;
+    }
+
+    /*@GetMapping("/{id}")
     public ResponseEntity<?> obtenerSeccionPorId(@PathVariable Integer id) {
         Optional<Seccion> seccion = seccionService.buscarSeccionPorId(id);
 
@@ -37,7 +70,7 @@ public class SeccionController {
             return ResponseEntity.ok(seccion.get());
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe una seccion con el ID " + id);
-    }
+    }*/
 
     @PostMapping
     public ResponseEntity<Seccion> guardarSeccion(@RequestBody @Valid Seccion seccion) {
