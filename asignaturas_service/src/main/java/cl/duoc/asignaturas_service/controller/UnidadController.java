@@ -4,6 +4,8 @@ import cl.duoc.asignaturas_service.dto.AsignaturaDTO;
 import cl.duoc.asignaturas_service.dto.UnidadDTO;
 import cl.duoc.asignaturas_service.model.Unidad;
 import cl.duoc.asignaturas_service.service.UnidadService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,11 @@ public class UnidadController {
     @Autowired
     private UnidadService unidadservice;
 
+    @Operation(summary = "Obtiene todas las unidades", description = "Retorna la lista de todas las unidades")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "204", description = "No hay unidades registradas")
+    })
     @GetMapping
     public ResponseEntity<List<Unidad>> obtenerUnidades(){
         List<Unidad> unidades = unidadservice.obtenerUnidades();
@@ -38,6 +45,10 @@ public class UnidadController {
     }
 
     @Operation(summary = "Obtiene una unidad por su id ", description = "Retorna la informacios de una Unidad específica por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Unidad no encontrada")
+    })
     @GetMapping("/{id}")
     public EntityModel<Unidad> obtenerUnidad(@PathVariable Integer id){
         Unidad unidad = unidadservice.buscarUnidadPorId(id).orElseThrow();
@@ -63,20 +74,21 @@ public class UnidadController {
         return model;
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> buscarUnidadPorId (@PathVariable Integer id){
-        Optional<Unidad> unidad = unidadservice.buscarUnidadPorId(id);
-        if (unidad.isPresent()){
-            return ResponseEntity.ok(unidad.get());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No existe una unidad con el ID " + id);
-    }*/
-
+    @Operation(summary = "Crea una nueva unidad", description = "Registra una unidad nueva en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     @PostMapping
     public ResponseEntity<Unidad> crearUnidad(@RequestBody @Valid Unidad unidad) {
         return ResponseEntity.ok(unidadservice.guardarUnidad(unidad));
     }
 
+    @Operation(summary = "Actualiza una unidad", description = "Actualiza los datos de una unidad existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Unidad no encontrada")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Unidad unidad) {
         try {
@@ -86,6 +98,11 @@ public class UnidadController {
         }
     }
 
+    @Operation(summary = "Elimina una unidad", description = "Elimina una unidad existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Unidad no encontrada")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {
@@ -95,7 +112,5 @@ public class UnidadController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no existe una unidad con el id " + id);
         }
     }
-
-
 
 }

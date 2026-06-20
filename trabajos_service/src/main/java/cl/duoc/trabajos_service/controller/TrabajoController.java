@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
@@ -25,6 +27,11 @@ public class TrabajoController {
     @Autowired
     private TrabajoService trabajoService;
 
+    @Operation(summary = "Obtiene todos los trabajos", description = "Retorna la lista de todos los trabajos")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron trabajos")
+    })
     @GetMapping
     public ResponseEntity<?> obtenerTrabajos() {
         List<Trabajo> trabajos = trabajoService.obtenerTrabajos();
@@ -35,6 +42,10 @@ public class TrabajoController {
     }
 
     @Operation(summary = "Obtiene un trabajo por su id ", description = "Retorna la informacion de un trabajo específico por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Trabajo no encontrado")
+    })
     @GetMapping("/{id}")
     public EntityModel<Trabajo> obtenerTrabajo(@PathVariable Integer id){
         Trabajo trabajo = trabajoService.buscarTrabajoPorId(id).orElseThrow();
@@ -60,20 +71,21 @@ public class TrabajoController {
         return model;
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPorId(@PathVariable int id) {
-        Optional<Trabajo> trabajo = trabajoService.buscarTrabajoPorId(id);
-        if (trabajo.isPresent()) {
-            return ResponseEntity.ok(trabajo.get());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("no existe un trabajo con el id " + id);
-    }*/
-
+    @Operation(summary = "Crea un nuevo trabajo", description = "Registra un trabajo nuevo en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     @PostMapping
     public ResponseEntity<Trabajo> crearTrabajo(@RequestBody @Valid Trabajo trabajo) {
         return ResponseEntity.ok(trabajoService.guardarTrabajo(trabajo));
     }
 
+    @Operation(summary = "Actualiza un trabajo", description = "Actualiza los datos de un trabajo existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Trabajo no encontrado")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Trabajo trabajo) {
         try {
@@ -83,6 +95,11 @@ public class TrabajoController {
         }
     }
 
+    @Operation(summary = "Elimina un trabajo", description = "Elimina un trabajo existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Trabajo no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {
@@ -93,6 +110,11 @@ public class TrabajoController {
         }
     }
 
+    @Operation(summary = "Obtiene trabajos por grupo", description = "Retorna el trabajo asociado a un grupo específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Grupo no encontrado")
+    })
     @GetMapping("/grupo/{idGrupo}")
     public ResponseEntity<Trabajo> obtenerPorGrupo(@PathVariable Integer idGrupo) {
         return ResponseEntity.ok(trabajoService.obtenerPorGrupo(idGrupo));

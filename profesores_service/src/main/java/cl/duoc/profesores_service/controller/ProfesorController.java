@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
@@ -26,6 +28,11 @@ public class ProfesorController {
     @Autowired
     private ProfesorService profesorService;
 
+    @Operation(summary = "Obtiene todos los profesores", description = "Retorna la lista de todos los profesores")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron profesores")
+    })
     @GetMapping
     public ResponseEntity<?> obtenerProfesores() {
         List<Profesor> profesores = profesorService.obtenerProfesores();
@@ -36,6 +43,10 @@ public class ProfesorController {
     }
 
     @Operation(summary = "Obtiene un profesor por su id ", description = "Retorna la informacios de un profesor específico por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
+    })
     @GetMapping("/{id}")
     public EntityModel<Profesor> obtenerProfesor(@PathVariable Integer id){
         Profesor profesor = profesorService.buscarProfesorPorId(id).orElseThrow();
@@ -61,23 +72,21 @@ public class ProfesorController {
         return model;
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> obtenerProfesorPorId(@PathVariable Integer id) {
-        Optional<Profesor> profesorOptional = profesorService.buscarProfesorPorId(id);
-
-        if (profesorOptional.isPresent()) {
-            return ResponseEntity.ok(profesorOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No existe el profesor con el ID: " + id);
-        }
-    }*/
-
+    @Operation(summary = "Crea un nuevo profesor", description = "Registra un profesor nuevo en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     @PostMapping
     public ResponseEntity<Profesor> crearProfesor(@RequestBody @Valid Profesor profesor) {
         return ResponseEntity.status(HttpStatus.CREATED).body(profesorService.guardarProfesor(profesor));
     }
 
+    @Operation(summary = "Actualiza un profesor", description = "Actualiza los datos de un profesor existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarProfesor(@PathVariable int id, @RequestBody Profesor profesor) {
         try {
@@ -87,6 +96,11 @@ public class ProfesorController {
         }
     }
 
+    @Operation(summary = "Elimina un profesor", description = "Elimina un profesor existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarProfesor(@PathVariable Integer id) {
         try {
@@ -97,6 +111,11 @@ public class ProfesorController {
         }
     }
 
+    @Operation(summary = "Obtiene un profesor con sus secciones", description = "Retorna la información de un profesor junto con sus secciones asociadas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
+    })
     @GetMapping("/{idProfesor}/con-secciones")
     public ResponseEntity<ProfesorSeccionDTO> obtenerConSecciones(
             @PathVariable Integer idProfesor) {

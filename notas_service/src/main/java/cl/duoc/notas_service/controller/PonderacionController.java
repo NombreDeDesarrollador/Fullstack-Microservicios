@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.EntityModel;
@@ -27,19 +29,11 @@ public class PonderacionController {
     @Autowired
     private PonderacionService ponderacionService;
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> obtenerPonderacion(@PathVariable Integer id) {
-        Optional<Ponderacion> ponderacionOptional = ponderacionService.buscarPonderacionPorId(id);
-
-        if (ponderacionOptional.isPresent()) {
-            return ResponseEntity.ok(ponderacionOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No se encontro una ponderacion con el ID: " + id);
-        }
-    }*/
-
-    @Operation(summary = "Obtiene un integrante por su id ", description = "Retorna la informacios de un Integrante específico por su ID")
+    @Operation(summary = "Obtiene una ponderacion por su id ", description = "Retorna la informacios de una ponderacion específica por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Ponderacion no encontrada")
+    })
     @GetMapping("/{id}")
     public EntityModel<Ponderacion> obtenerPonderacion(@PathVariable Integer id){
         Ponderacion ponderacion = ponderacionService.buscarPonderacionPorId(id).orElseThrow();
@@ -65,6 +59,11 @@ public class PonderacionController {
         return model;
     }
 
+    @Operation(summary = "Obtiene todas las ponderaciones", description = "Retorna la lista de todas las ponderaciones")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron ponderaciones")
+    })
     @GetMapping
     public ResponseEntity<?> obtenerPonderaciones() {
         List<Ponderacion> ponderaciones = ponderacionService.obtenerPonderacion();
@@ -74,11 +73,21 @@ public class PonderacionController {
         return ResponseEntity.ok(ponderaciones);
     }
 
+    @Operation(summary = "Crea una nueva ponderacion", description = "Registra una ponderacion nueva en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     @PostMapping
     public ResponseEntity<Ponderacion> crearPonderacion(@RequestBody @Valid Ponderacion ponderacion) {
         return ResponseEntity.ok(ponderacionService.guardarPonderacion(ponderacion));
     }
 
+    @Operation(summary = "Actualiza una ponderacion", description = "Actualiza los datos de una ponderacion existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Ponderacion no encontrada")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Ponderacion ponderacion) {
         try {
@@ -88,6 +97,11 @@ public class PonderacionController {
         }
     }
 
+    @Operation(summary = "Elimina una ponderacion", description = "Elimina una ponderacion existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Ponderacion no encontrada")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {

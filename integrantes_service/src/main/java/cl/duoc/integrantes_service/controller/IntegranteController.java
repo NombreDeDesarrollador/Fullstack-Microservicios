@@ -3,6 +3,8 @@ package cl.duoc.integrantes_service.controller;
 import cl.duoc.integrantes_service.dto.IntegranteRolDTO;
 import cl.duoc.integrantes_service.model.Integrante;
 import cl.duoc.integrantes_service.service.IntegranteService;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,10 @@ public class IntegranteController {
     private IntegranteService integranteService;
 
     @GetMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron integrantes")
+    })
     public ResponseEntity<?> obtenerIntegrantes() {
         List<Integrante> integrantes = integranteService.obtenerIntegrantes();
         if (integrantes.isEmpty()) {
@@ -38,6 +44,10 @@ public class IntegranteController {
 
     @Operation(summary = "Obtiene un integrante por su id ", description = "Retorna la informacios de un Integrante específico por su ID")
     @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Integrante no encontrado")
+    })
     public EntityModel<Integrante> obtenerIntegrante(@PathVariable Integer id){
         Integrante integrante = integranteService.buscarIntegrantePorId(id).orElseThrow();
         EntityModel<Integrante> model = EntityModel.of(integrante);
@@ -71,11 +81,19 @@ public class IntegranteController {
     //}
 
     @PostMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     public ResponseEntity<?> crearIntegrante(@Valid @RequestBody Integrante integrante) {
         return ResponseEntity.status(HttpStatus.CREATED).body(integranteService.guardarIntegrante(integrante));
     }
 
     @PutMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Integrante no encontrado")
+    })
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Integrante integrante) {
         try {
             return ResponseEntity.ok(integranteService.actualizarIntegrante(id, integrante));
@@ -85,6 +103,10 @@ public class IntegranteController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Integrante no encontrado")
+    })
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {
             integranteService.eliminarIntegrante(id);
@@ -95,11 +117,19 @@ public class IntegranteController {
     }
 
     @GetMapping("/grupo/{idGrupo}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Grupo no encontrado")
+    })
     public ResponseEntity<List<Integrante>> obtenerPorGrupo(@PathVariable Integer idGrupo) {
         return ResponseEntity.ok(integranteService.obtenerPorGrupo(idGrupo));
     }
 
     @GetMapping("/{idIntegrante}/con-rol")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Integrante no encontrado")
+    })
     public ResponseEntity<IntegranteRolDTO> obtenerConRol(
             @PathVariable Integer idIntegrante) {
         return ResponseEntity.ok(integranteService.obtenerIntegranteConRol(idIntegrante));

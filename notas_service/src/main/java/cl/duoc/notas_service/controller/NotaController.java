@@ -12,6 +12,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import org.springframework.hateoas.Link;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.hateoas.EntityModel;
 
@@ -25,7 +27,11 @@ public class NotaController {
     @Autowired
     private NotaService notaService;
 
-
+    @Operation(summary = "Obtiene todas las notas", description = "Retorna la lista de todas las notas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "No se encontraron notas")
+    })
     @GetMapping
     public ResponseEntity<?> obtenerNotas() {
         List<Nota> notas = notaService.obtenerNotas();
@@ -36,6 +42,10 @@ public class NotaController {
     }
 
     @Operation(summary = "Obtiene una nota por su id ", description = "Retorna la informacios de una nota específica por su ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @GetMapping("/{id}")
     public EntityModel<Nota> obtenerNota(@PathVariable Integer id){
         Nota nota = notaService.buscarNotaPorId(id).orElseThrow();
@@ -61,24 +71,21 @@ public class NotaController {
         return model;
     }
 
-    /*@GetMapping("/{id}")
-    public ResponseEntity<?> obtenerNotaPorId(@PathVariable Integer id) {
-        Optional<Nota> notaOptional = notaService.buscarNotaPorId(id);
-
-        if (notaOptional.isPresent()) {
-            return ResponseEntity.ok(notaOptional.get());
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("No existe una nota con el ID: " + id);
-        }
-    }*/
-
-
+    @Operation(summary = "Crea una nueva nota", description = "Registra una nota nueva en el sistema")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado exitosamente"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     @PostMapping
     public ResponseEntity<Nota> crearNota(@RequestBody @Valid Nota nota) {
         return ResponseEntity.ok(notaService.guardarNota(nota));
     }
 
+    @Operation(summary = "Actualiza una nota", description = "Actualiza los datos de una nota existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Nota nota) {
         try {
@@ -88,6 +95,11 @@ public class NotaController {
         }
     }
 
+    @Operation(summary = "Elimina una nota", description = "Elimina una nota existente por su id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "Nota no encontrada")
+    })
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {
@@ -98,6 +110,11 @@ public class NotaController {
         }
     }
 
+    @Operation(summary = "Obtiene las notas de un integrante", description = "Retorna las notas asociadas a un integrante específico")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Integrante no encontrado")
+    })
     @GetMapping("{idIntegrante}/con-integrante")
     public ResponseEntity<NotasIntegranteDTO> getNotasConIntegrante(@PathVariable Integer idIntegrante) {
         NotasIntegranteDTO dto = notaService.obtenerNotasConIntegrante(idIntegrante);

@@ -44,8 +44,11 @@ public class GrupoController {
     }
 
     @Operation(summary = "Obtiene un grupo por su id ", description = "Retorna la informacios de un grupo específico por su ID")
-
     @GetMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "404", description = "Grupo no encontrado")
+    })
     public EntityModel<Grupo> obtenerGrupo(@PathVariable Integer id){
         Grupo grupo = grupoService.buscarGrupoPorId(id).orElseThrow();
         EntityModel<Grupo> model = EntityModel.of(grupo);
@@ -65,7 +68,7 @@ public class GrupoController {
                 linkTo(
                         methodOn(GrupoController.class)
                                 .obtenerGrupos()
-                ).withRel("todos-los grupos")
+                ).withRel("todos-los-grupos")
         );
         return model;
     }
@@ -80,11 +83,20 @@ public class GrupoController {
     }*/
 
     @PostMapping
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Creado"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos")
+    })
     public ResponseEntity<Grupo> crearGrupo(@RequestBody @Valid Grupo grupo) {
         return ResponseEntity.ok(grupoService.guardarGrupo(grupo));
     }
 
     @PutMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Aprobado"),
+            @ApiResponse(responseCode = "400", description = "Datos inválidos"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")
+    })
     public ResponseEntity<?> actualizar(@PathVariable int id, @RequestBody Grupo grupo) {
         try {
             return ResponseEntity.ok(grupoService.actualizarGrupo(id, grupo));
@@ -94,6 +106,10 @@ public class GrupoController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Eliminado"),
+            @ApiResponse(responseCode = "404", description = "No encontrado")
+    })
     public ResponseEntity<String> eliminar(@PathVariable int id) {
         try {
             grupoService.eliminarGrupo(id);
