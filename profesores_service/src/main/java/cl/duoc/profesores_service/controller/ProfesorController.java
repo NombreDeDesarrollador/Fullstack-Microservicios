@@ -48,8 +48,15 @@ public class ProfesorController {
             @ApiResponse(responseCode = "404", description = "Profesor no encontrado")
     })
     @GetMapping("/{id}")
-    public EntityModel<Profesor> obtenerProfesor(@PathVariable Integer id){
-        Profesor profesor = profesorService.buscarProfesorPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerProfesor(@PathVariable Integer id){
+        Optional<Profesor> profesorOptional = profesorService.buscarProfesorPorId(id);
+
+        if (profesorOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un profesor con el ID " + id);
+        }
+
+        Profesor profesor = profesorOptional.get();
         EntityModel<Profesor> model = EntityModel.of(profesor);
 
         model.add(
@@ -69,7 +76,7 @@ public class ProfesorController {
                                 .obtenerProfesores()
                 ).withRel("todos-los profesores")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea un nuevo profesor", description = "Registra un profesor nuevo en el sistema")

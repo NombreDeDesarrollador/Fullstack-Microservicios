@@ -47,8 +47,15 @@ public class NotaController {
             @ApiResponse(responseCode = "404", description = "Nota no encontrada")
     })
     @GetMapping("/{id}")
-    public EntityModel<Nota> obtenerNota(@PathVariable Integer id){
-        Nota nota = notaService.buscarNotaPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerNota(@PathVariable Integer id){
+        Optional<Nota> notaOptional = notaService.buscarNotaPorId(id);
+
+        if (notaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe una nota con el ID " + id);
+        }
+
+        Nota nota = notaOptional.get();
         EntityModel<Nota> model = EntityModel.of(nota);
 
         model.add(
@@ -68,9 +75,8 @@ public class NotaController {
                                 .obtenerNotas()
                 ).withRel("todos-los integrantes")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
-
     @Operation(summary = "Crea una nueva nota", description = "Registra una nota nueva en el sistema")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Creado exitosamente"),

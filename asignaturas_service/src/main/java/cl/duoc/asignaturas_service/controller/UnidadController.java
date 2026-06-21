@@ -50,8 +50,15 @@ public class UnidadController {
             @ApiResponse(responseCode = "404", description = "Unidad no encontrada")
     })
     @GetMapping("/{id}")
-    public EntityModel<Unidad> obtenerUnidad(@PathVariable Integer id){
-        Unidad unidad = unidadservice.buscarUnidadPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerUnidad(@PathVariable Integer id){
+        Optional<Unidad> unidadOptional = unidadservice.buscarUnidadPorId(id);
+
+        if (unidadOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe una unidad con el ID " + id);
+        }
+
+        Unidad unidad = unidadOptional.get();
         EntityModel<Unidad> model = EntityModel.of(unidad);
 
         model.add(
@@ -71,7 +78,7 @@ public class UnidadController {
                                 .obtenerUnidades()
                 ).withRel("todos-las unidades")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea una nueva unidad", description = "Registra una unidad nueva en el sistema")

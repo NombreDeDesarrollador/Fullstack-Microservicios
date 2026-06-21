@@ -35,8 +35,15 @@ public class PonderacionController {
             @ApiResponse(responseCode = "404", description = "Ponderacion no encontrada")
     })
     @GetMapping("/{id}")
-    public EntityModel<Ponderacion> obtenerPonderacion(@PathVariable Integer id){
-        Ponderacion ponderacion = ponderacionService.buscarPonderacionPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerPonderacion(@PathVariable Integer id){
+        Optional<Ponderacion> ponderacionOptional = ponderacionService.buscarPonderacionPorId(id);
+
+        if (ponderacionOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe una ponderacion con el ID " + id);
+        }
+
+        Ponderacion ponderacion = ponderacionOptional.get();
         EntityModel<Ponderacion> model = EntityModel.of(ponderacion);
 
         model.add(
@@ -56,7 +63,7 @@ public class PonderacionController {
                                 .obtenerPonderaciones()
                 ).withRel("todos-los ponderaciones")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Obtiene todas las ponderaciones", description = "Retorna la lista de todas las ponderaciones")

@@ -47,8 +47,15 @@ public class TrabajoController {
             @ApiResponse(responseCode = "404", description = "Trabajo no encontrado")
     })
     @GetMapping("/{id}")
-    public EntityModel<Trabajo> obtenerTrabajo(@PathVariable Integer id){
-        Trabajo trabajo = trabajoService.buscarTrabajoPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerTrabajo(@PathVariable Integer id){
+        Optional<Trabajo> trabajoOptional = trabajoService.buscarTrabajoPorId(id);
+
+        if (trabajoOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un trabajo con el ID " + id);
+        }
+
+        Trabajo trabajo = trabajoOptional.get();
         EntityModel<Trabajo> model = EntityModel.of(trabajo);
 
         model.add(
@@ -68,7 +75,7 @@ public class TrabajoController {
                                 .obtenerTrabajos()
                 ).withRel("todos-los trabajos")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea un nuevo trabajo", description = "Registra un trabajo nuevo en el sistema")

@@ -47,14 +47,21 @@ public class AsignaturaController {
             return ResponseEntity.ok(asignaturas);
     }
 
-    @Operation (summary = "Obtiene una asignatura por su id ", description = "Retorna la informacion de una Integrante específico por su ID")
+    @Operation (summary = "Obtiene una asignatura por su id ", description = "Retorna la informacion de una asignatura específico por su ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aprobado"),
             @ApiResponse(responseCode = "404", description = "Asignatura no encontrada")
     })
     @GetMapping("/{id}")
-    public EntityModel<Asignatura> obtenerAsignatura(@PathVariable Integer id){
-        Asignatura asignatura = asignaturaService.buscarAsignaturaPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerAsignatura(@PathVariable Integer id){
+        Optional<Asignatura> asignaturaOptional = asignaturaService.buscarAsignaturaPorId(id);
+
+        if (asignaturaOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe una asignatura con el ID " + id);
+        }
+
+        Asignatura asignatura = asignaturaOptional.get();
         EntityModel<Asignatura> model = EntityModel.of(asignatura);
 
         model.add(
@@ -74,7 +81,7 @@ public class AsignaturaController {
                                 .obtenerAsignaturas()
                 ).withRel("todos-las asignaturas")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea una nueva asignatura", description = "Registra una asignatura nueva en el sistema")

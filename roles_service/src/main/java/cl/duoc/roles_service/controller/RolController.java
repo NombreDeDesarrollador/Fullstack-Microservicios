@@ -47,8 +47,15 @@ public class RolController {
             @ApiResponse(responseCode = "404", description = "Rol no encontrado")
     })
     @GetMapping("/{id}")
-    public EntityModel<Rol> obtenerRol(@PathVariable Integer id){
-        Rol rol = rolService.buscarRolPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerRol(@PathVariable Integer id){
+        Optional<Rol> rolOptional = rolService.buscarRolPorId(id);
+
+        if (rolOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un rol con el ID " + id);
+        }
+
+        Rol rol = rolOptional.get();
         EntityModel<Rol> model = EntityModel.of(rol);
 
         model.add(
@@ -68,7 +75,7 @@ public class RolController {
                                 .obtenerRoles()
                 ).withRel("todos-los roles")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea un nuevo rol", description = "Registra un rol nuevo en el sistema")

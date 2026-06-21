@@ -49,8 +49,15 @@ public class SeccionController {
             @ApiResponse(responseCode = "404", description = "Seccion no encontrada")
     })
     @GetMapping("/{id}")
-    public EntityModel<Seccion> obtenerSeccion(@PathVariable Integer id){
-        Seccion seccion = seccionService.buscarSeccionPorId(id).orElseThrow();
+    public ResponseEntity<?> obtenerSeccion(@PathVariable Integer id){
+        Optional<Seccion> seccionOptional = seccionService.buscarSeccionPorId(id);
+
+        if (seccionOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe una seccion con el ID " + id);
+        }
+
+        Seccion seccion = seccionOptional.get();
         EntityModel<Seccion> model = EntityModel.of(seccion);
 
         model.add(
@@ -70,7 +77,7 @@ public class SeccionController {
                                 .obtenerSecciones()
                 ).withRel("todos-los secciones")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     @Operation(summary = "Crea una nueva seccion", description = "Registra una seccion nueva en el sistema")

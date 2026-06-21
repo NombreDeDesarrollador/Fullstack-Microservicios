@@ -44,13 +44,20 @@ public class GrupoController {
     }
 
     @Operation(summary = "Obtiene un grupo por su id ", description = "Retorna la informacios de un grupo específico por su ID")
-    @GetMapping("/{id}")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Aprobado"),
             @ApiResponse(responseCode = "404", description = "Grupo no encontrado")
     })
-    public EntityModel<Grupo> obtenerGrupo(@PathVariable Integer id){
-        Grupo grupo = grupoService.buscarGrupoPorId(id).orElseThrow();
+    @GetMapping("/{id}")
+    public ResponseEntity<?> obtenerGrupo(@PathVariable Integer id){
+        Optional<Grupo> grupoOptional = grupoService.buscarGrupoPorId(id);
+
+        if (grupoOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("No existe un grupo con el ID " + id);
+        }
+
+        Grupo grupo = grupoOptional.get();
         EntityModel<Grupo> model = EntityModel.of(grupo);
 
         model.add(
@@ -68,9 +75,9 @@ public class GrupoController {
                 linkTo(
                         methodOn(GrupoController.class)
                                 .obtenerGrupos()
-                ).withRel("todos-los-grupos")
+                ).withRel("todos-los grupos")
         );
-        return model;
+        return ResponseEntity.ok(model);
     }
 
     /*@GetMapping("/{id}")
