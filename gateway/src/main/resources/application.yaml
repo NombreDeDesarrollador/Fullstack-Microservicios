@@ -59,3 +59,13 @@ spring:
             uri: http://localhost:8090
             predicates:
               - Path=/api/v1/trabajos/**
+
+          - id: entregas
+            uri: http://localhost:8091
+            predicates:
+              - Path=/api/v1/entregas/**
+
+          - id: comentarios
+            uri: http://localhost:8092
+            predicates:
+              - Path=/api/v1/comentarios/**
