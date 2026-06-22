@@ -54,7 +54,7 @@ Evaluar el funcionamiento de los microservicios principales del proyecto
 
 ### Objetivos cumplidos: 2/2
 
-## P-05 MOSTRAR INTEGRANTE Y GRUPO AL CUAL PERTENECE.
+## P-06 MOSTRAR INTEGRANTE Y GRUPO AL CUAL PERTENECE.
 ### Metodo: obtenerPorGrupo
 ### Objetivos:
 
@@ -63,4 +63,6 @@ Evaluar el funcionamiento de los microservicios principales del proyecto
 
 ### Objetivos cumplidos: 2/2
 
-## P-06 VERIFICAR SI LOS MICROSERVICIOS SE MUESTRAN EN EUREKA
+## P-07 VERIFICAR SI LOS MICROSERVICIOS SE MUESTRAN EN EUREKA
+
+### Se muestran todos los módulos en Eureka (localhost:8761)
