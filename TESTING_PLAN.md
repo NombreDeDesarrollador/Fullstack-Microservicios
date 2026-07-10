@@ -2,67 +2,87 @@
 
 ## Objetivo
 
-Evaluar el funcionamiento de los microservicios principales del proyecto
+Evaluar el funcionamiento de los microservicios del proyecto en base a las pruebas automatizadas (JUnit 5 + Mockito + MockMvc) actualmente implementadas en el código.
 
-### Microservicios a testear:
+### Microservicios testeados:
 
-* integrantes_service
 * grupos_service
+* integrantes_service
+* trabajos_service
+* eureka-server (solo carga de contexto)
+* gateway (solo carga de contexto)
 
-## Las pruebas serán realizadas con Postman, Sweagger u OpenApi, navegador y Eureka.
+---
 
-## P-01 CREAR UN INTEGRANTE.
-### Metodo: Crear Integrante
+# integrantes_service
+
+
+## P-01 MOSTRAR INTEGRANTES.
+### Metodo: obtenerTodosLosIntegrantes (GET /api/v1/integrantes)
 ### Objetivos:
-- Ingresar un integrante de manera exitosa junto a un mensaje de aprobacion.
-- Validar la ausencia de un valor y mostrar un mensaje de error.
-
-### Objetivos cumplidos: 2/2
-
-## P-02 MOSTRAR INTEGRANTES.
-### Metodo: Obtener Integrantes
-### Objetivos:
-
 - Mostrar integrantes junto a un mensaje de aprobación.
 - En caso de no existir integrantes, mostrar un mensaje diciendo que no hay integrantes.
 
 ### Objetivos cumplidos: 2/2
 
-## P-03 MOSTRAR UN INTEGRANTE POR UN ID ESPECÍFICO.
-### Metodo: Buscar Integrante Por Id
+## P-02 MOSTRAR UN INTEGRANTE POR UN ID ESPECÍFICO.
+### Metodo: GET /api/v1/integrantes/{id}
 ### Objetivos:
-
-- Ingresar un ID y mostrar al integrante perteneciente al mismo.
+- Ingresar un ID y mostrar al integrante del mismo.
 - Mostrar mensaje de error en caso de que no exista un integrante con el ID ingresado.
 
 ### Objetivos cumplidos: 2/2
 
-## P-04 ACTUALIZAR UN INTEGRANTE POR SU ID.
-### Metodo: actualizar
-### Objetivos: 
+---
 
-- Generar cambiar los datos deseados de un integrante que ya exista
+# grupos_service
+
+## P-01 MOSTRAR GRUPOS.
+### Metodo: obtenerGrupos (GET /api/v1/grupos)
+### Objetivos:
+- Mostrar grupos junto a un mensaje de aprobación.
+- En caso de no existir grupos, mostrar un mensaje diciendo que no hay grupos.
+
+### Objetivos cumplidos: 2/2
+
+## P-02 MOSTRAR UN GRUPO POR UN ID ESPECÍFICO.
+### Metodo: buscarGrupoPorId (GET /api/v1/grupos/{id})
+### Objetivos:
+- Ingresar un ID y mostrar el grupo perteneciente al mismo.
+- Mostrar mensaje de error en caso de que no exista un grupo con el ID ingresado.
+
+### Objetivos cumplidos: 2/2
+
+
+## P-06 MOSTRAR GRUPO JUNTO A SUS INTEGRANTES.
+### Metodo: obtenerGrupoConIntegrantes (GET /api/v1/grupos/{idGrupo}/con-integrantes)
+### Objetivos:
+- Mostrar el grupo junto al listado de sus integrantes.
 
 ### Objetivos cumplidos: 1/1
 
-## P-05 ELIMINAR UN INTEGRANTE POR SU ID.
-### Metodo: eliminar
+## P-07 MOSTRAR GRUPO JUNTO A SU TRABAJO.
+### Metodo: obtenerGrupoConTrabajo (GET /api/v1/grupos/{idGrupo}/con-trabajo)
 ### Objetivos:
 
-- Eliminar un integrante que ya exista mediante su ID.
-- Validar si no existe un integrante con el ID ingresado, ymostrar mensaje de error.
+- Mostrar el grupo junto al trabajo que tiene asignado.
+
+### Objetivos cumplidos: 1/1
+
+---
+
+# eureka-server y gateway
+
+## P-01 VERIFICAR QUE EL CONTEXTO DE SPRING BOOT LEVANTA CORRECTAMENTE.
+### Metodo: contextLoads (`EurekaServerApplicationTests`, `GatewayApplicationTests`)
+### Objetivos:
+- Confirmar que el ApplicationContext de eureka-server levanta sin errores.
+- Confirmar que el ApplicationContext de gateway levanta sin errores.
 
 ### Objetivos cumplidos: 2/2
 
-## P-06 MOSTRAR INTEGRANTE Y GRUPO AL CUAL PERTENECE.
-### Metodo: obtenerPorGrupo
-### Objetivos:
+---
 
-- Mostrar integrante junto a su grupo.
-- Validar si no existe un integrante con el ID ingresado, y mostrar mensaje de error.
-
-### Objetivos cumplidos: 2/2
-
-## P-07 VERIFICAR SI LOS MICROSERVICIOS SE MUESTRAN EN EUREKA
+## P-FINAL VERIFICAR SI LOS MICROSERVICIOS SE MUESTRAN EN EUREKA
 
 ### Se muestran todos los módulos en Eureka (localhost:8761)

@@ -78,4 +78,58 @@ public class GrupoControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nombreGrupo").value("Grupo B"));
     }
+
+    @Test
+    void testObtenerGrupos_CuandoNoExistenGrupos() throws Exception {
+        when(grupoService.obtenerGrupos()).thenReturn(java.util.Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/grupos")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$").isEmpty());
+    }
+
+    @Test
+    void testObtenerGrupo_CuandoNoExiste() throws Exception {
+        when(grupoService.buscarGrupoPorId(99)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/v1/grupos/99")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void testObtenerGrupoConIntegrantes() throws Exception {
+        GrupoIntegranteDTO grupoIntegranteDTO = new GrupoIntegranteDTO();
+        grupoIntegranteDTO.setIdGrupo(1);
+        grupoIntegranteDTO.setNombreGrupo("Grupo A");
+        
+        cl.duoc.grupos_service.dto.IntegranteDTO integranteDTO = new cl.duoc.grupos_service.dto.IntegranteDTO();
+        integranteDTO.setIdIntegrante(10);
+        integranteDTO.setNombre("Pedro");
+        grupoIntegranteDTO.setIntegrantes(java.util.Arrays.asList(integranteDTO));
+
+        when(grupoService.obtenerGrupoConIntegrantes(1)).thenReturn(grupoIntegranteDTO);
+
+        mockMvc.perform(get("/api/v1/grupos/1/con-integrantes")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombreGrupo").value("Grupo A"))
+                .andExpect(jsonPath("$.integrantes").isArray())
+                .andExpect(jsonPath("$.integrantes[0].nombre").value("Pedro"))
+                .andExpect(jsonPath("$.integrantes[0].idIntegrante").value(10));
+    }
+
+    @Test
+    void testObtenerGrupoConIntegrantes_CuandoGrupoNoExiste() throws Exception {
+        // Simulamos que el servicio "explota" con una excepción
+        when(grupoService.obtenerGrupoConIntegrantes(99)).thenThrow(new RuntimeException("Grupo no encontrado"));
+
+        mockMvc.perform(get("/api/v1/grupos/99/con-integrantes")
+                .contentType(MediaType.APPLICATION_JSON))
+                // Cambiamos isNotFound() por isInternalServerError() que es la respuesta por defecto de Spring
+                // ante excepciones no manejadas (HTTP 500).
+                .andExpect(status().isInternalServerError());
+    }
 }

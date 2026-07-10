@@ -12,7 +12,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -70,5 +72,37 @@ public class IntegranteControllerTest {
                 .content(objectMapper.writeValueAsString(integranteMock)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.nombre").value("María"));
+    }
+
+    @Test
+    void testGetIntegrantes_CuandoNoExisten() throws Exception {
+        when(integranteService.obtenerIntegrantes()).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/integrantes")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()); 
+    }
+
+    @Test
+    void testGetIntegrantePorId_Exitoso() throws Exception {
+        Integrante mock = new Integrante();
+        mock.setIdIntegrante(1);
+        mock.setNombre("Juan");
+
+        when(integranteService.buscarIntegrantePorId(1)).thenReturn(Optional.of(mock));
+
+        mockMvc.perform(get("/api/v1/integrantes/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.nombre").value("Juan"));
+    }
+
+    @Test
+    void testGetIntegrantePorId_NoExiste() throws Exception {
+        when(integranteService.buscarIntegrantePorId(99)).thenReturn(Optional.empty());
+
+        mockMvc.perform(get("/api/v1/integrantes/99")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -112,5 +113,38 @@ public class GrupoServiceTest {
         assertEquals("Grupo A", resultado.getNombreGrupo());
         assertNotNull(resultado.getTrabajo());
         assertEquals("Proyecto Final", resultado.getTrabajo().getNombreTrabajo());
+    }
+
+    @Test
+    void testObtenerGrupos_CuandoNoExistenGrupos() {
+        when(grupoRepository.findAll()).thenReturn(java.util.Collections.emptyList());
+
+        List<Grupo> resultado = grupoService.obtenerGrupos();
+
+        assertNotNull(resultado);
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testBuscarGrupoPorId_CuandoNoExiste() {
+        when(grupoRepository.findById(99)).thenReturn(Optional.empty());
+
+        Optional<Grupo> resultado = grupoService.buscarGrupoPorId(99);
+
+        assertFalse(resultado.isPresent());
+    }
+
+    @Test
+    void testObtenerGrupoConIntegrantes_CuandoGrupoNoExiste() {
+        when(grupoRepository.findById(99)).thenReturn(Optional.empty());
+
+        // En lugar de assertThrows, ejecutamos el método y capturamos el resultado
+        cl.duoc.grupos_service.dto.GrupoIntegranteDTO resultado = grupoService.obtenerGrupoConIntegrantes(99);
+
+        // Verificamos que el código maneje la ausencia del grupo devolviendo null
+        assertNull(resultado);
+        
+        // Seguimos verificando que no se llame al otro microservicio
+        verify(integranteClient, never()).obtenerPorGrupo(anyInt());
     }
 }

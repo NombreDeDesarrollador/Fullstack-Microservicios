@@ -10,7 +10,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -63,5 +65,27 @@ public class IntegranteServiceTest {
         assertNotNull(resultado);
         assertEquals("Juan", resultado.getNombre());
         verify(integranteRepository, times(1)).save(any(Integrante.class));
+    }
+
+    @Test
+    void testObtenerTodosLosIntegrantes_CuandoNoExisten() {
+        when(integranteRepository.findAll()).thenReturn(Collections.emptyList());
+        List<Integrante> resultado = integranteService.obtenerIntegrantes();
+        assertTrue(resultado.isEmpty());
+    }
+
+    @Test
+    void testBuscarIntegrantePorId_Exitoso() {
+        when(integranteRepository.findById(1)).thenReturn(Optional.of(integranteMock));
+        Optional<Integrante> resultado = integranteService.buscarIntegrantePorId(1);
+        assertTrue(resultado.isPresent());
+        assertEquals("Juan", resultado.get().getNombre());
+    }
+
+    @Test
+    void testBuscarIntegrantePorId_CuandoNoExiste() {
+        when(integranteRepository.findById(99)).thenReturn(Optional.empty());
+        Optional<Integrante> resultado = integranteService.buscarIntegrantePorId(99);
+        assertFalse(resultado.isPresent());
     }
 }
