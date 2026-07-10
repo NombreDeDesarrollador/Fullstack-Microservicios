@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8095
 
 spring:
   application:
@@ -69,3 +69,43 @@ spring:
             uri: http://localhost:8092
             predicates:
               - Path=/api/v1/comentarios/**
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: notas
+        url: /api/v1/notas/v3/api-docs/notas
+        
+      - name: ponderaciones
+        url: /api/v1/notas/v3/api-docs/ponderaciones
+      
+      - name: asignaturas
+        url: /api/v1/asignaturas/v3/api-docs/asignaturas
+
+      - name: unidades
+        url: /api/v1/asignaturas/v3/api-docs/unidades
+
+      - name: profesores
+        url: /api/v1/profesores/v3/api-docs
+
+      - name: grupos
+        url: /api/v1/grupos/v3/api-docs
+
+      - name: integrantes
+        url: /api/v1/integrantes/v3/api-docs
+
+      - name: roles
+        url: /api/v1/roles/v3/api-docs
+
+      - name: secciones
+        url: /api/v1/secciones/v3/api-docs
+
+      - name: trabajos
+        url: /api/v1/trabajos/v3/api-docs
+
+      - name: entregas
+        url: /api/v1/entregas/v3/api-docs
+
+      - name: comentarios
+        url: /api/v1/comentarios/v3/api-docs
