@@ -7,68 +7,74 @@ spring:
 
   cloud:
     gateway:
-      mvc:
-        routes:
+          routes:
 
-          - id: notas
-            uri: http://localhost:8083
-            predicates:
-              - Path=/api/v1/notas/**
+            - id: notas
+              uri: http://notas_service:8083
+              predicates:
+                - Path=/api/v1/notas/**
 
-          - id: ponderaciones
-            uri: http://localhost:8083
-            predicates:
-              - Path=/api/v1/ponderaciones/**
+            - id: ponderaciones
+              uri: http://ponderaciones_service:8083
+              predicates:
+                - Path=/api/v1/ponderaciones/**
 
-          - id: asignaturas
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/v1/asignaturas/**
+            - id: asignaturas
+              uri: http://asignaturas_service:8084
+              predicates:
+                - Path=/api/v1/asignaturas/**
 
-          - id: unidades
-            uri: http://localhost:8084
-            predicates:
-              - Path=/api/v1/unidades/**
+            - id: unidades
+              uri: http://unidades_service:8084
+              predicates:
+                - Path=/api/v1/unidades/**
 
-          - id: profesores
-            uri: http://localhost:8085
-            predicates:
-              - Path=/api/v1/profesores/**
+            - id: profesores
+              uri: http://profesores_service:8085
+              predicates:
+                - Path=/api/v1/profesores/**
 
-          - id: grupos
-            uri: http://localhost:8086
-            predicates:
-              - Path=/api/v1/grupos/**
+            - id: grupos
+              uri: http://grupos_service:8086
+              predicates:
+                - Path=/api/v1/grupos/**
 
-          - id: integrantes
-            uri: http://localhost:8087
-            predicates:
-              - Path=/api/v1/integrantes/**
+            - id: integrantes
+              uri: http://integrantes_service:8087
+              predicates:
+                - Path=/api/v1/integrantes/**
 
-          - id: roles
-            uri: http://localhost:8088
-            predicates:
-              - Path=/api/v1/roles/**
+            - id: roles
+              uri: http://roles_service:8088
+              predicates:
+                - Path=/api/v1/roles/**
 
-          - id: secciones
-            uri: http://localhost:8089
-            predicates:
-              - Path=/api/v1/secciones/**
+            - id: secciones
+              uri: http://secciones_service:8089
+              predicates:
+                - Path=/api/v1/secciones/**
 
-          - id: trabajos
-            uri: http://localhost:8090
-            predicates:
-              - Path=/api/v1/trabajos/**
+            - id: trabajos
+              uri: http://trabajos_service:8090
+              predicates:
+                - Path=/api/v1/trabajos/**
 
-          - id: entregas
-            uri: http://localhost:8091
-            predicates:
-              - Path=/api/v1/entregas/**
+            - id: entregas
+              uri: http://entregas_service:8091
+              predicates:
+                - Path=/api/v1/entregas/**
 
-          - id: comentarios
-            uri: http://localhost:8092
-            predicates:
-              - Path=/api/v1/comentarios/**
+            - id: comentarios
+              uri: http://comentarios_service:8092
+              predicates:
+                - Path=/api/v1/comentarios/**
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
 
 springdoc:
   swagger-ui:
@@ -76,10 +82,10 @@ springdoc:
     urls:
       - name: notas
         url: /api/v1/notas/v3/api-docs/notas
-        
+
       - name: ponderaciones
         url: /api/v1/notas/v3/api-docs/ponderaciones
-      
+
       - name: asignaturas
         url: /api/v1/asignaturas/v3/api-docs/asignaturas
 
