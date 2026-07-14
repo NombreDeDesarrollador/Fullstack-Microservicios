@@ -11,7 +11,7 @@ public class WebClientConfig {
     @Bean("rolWebClient")
     public WebClient rolWebClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8088")
+                .baseUrl("http://roles-service:8088")
                 .build();
     }
 }

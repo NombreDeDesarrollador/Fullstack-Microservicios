@@ -10,7 +10,7 @@ public class WebClientConfig {
     @Bean("seccionWebClient")
     public WebClient seccionWebClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8089")
+                .baseUrl("http://secciones-service:8089")
                 .build();
     }
 }

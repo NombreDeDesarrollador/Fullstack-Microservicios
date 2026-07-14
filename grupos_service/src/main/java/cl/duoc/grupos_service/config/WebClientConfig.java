@@ -10,14 +10,14 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8087")
+                .baseUrl("http://integrantes-service:8087")
                 .build();
     }
 
     @Bean("trabajoWebClient")
     public WebClient trabajoWebClient() {
         return WebClient.builder()
-                .baseUrl("http://localhost:8090")
+                .baseUrl("http://trabajos-service:8090")
                 .build();
     }
 }

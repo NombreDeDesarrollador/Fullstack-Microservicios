@@ -14,7 +14,7 @@ public class IntegranteClient {
 
     public IntegranteDTO obtenerIntegrante(Integer id) {
         return webClient.get()
-                .uri("http://localhost:8087/api/v1/integrantes/" + id)
+                .uri("http://integrantes-service:8087/api/v1/integrantes/" + id)
                 .retrieve()
                 .bodyToMono(IntegranteDTO.class)
                 .block();
