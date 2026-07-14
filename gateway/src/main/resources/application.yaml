@@ -10,62 +10,62 @@ spring:
           routes:
 
             - id: notas
-              uri: http://notas_service:8083
+              uri: http://notas-service:8083
               predicates:
                 - Path=/api/v1/notas/**
 
             - id: ponderaciones
-              uri: http://ponderaciones_service:8083
+              uri: http://ponderaciones-service:8083
               predicates:
                 - Path=/api/v1/ponderaciones/**
 
             - id: asignaturas
-              uri: http://asignaturas_service:8084
+              uri: http://asignaturas-service:8084
               predicates:
                 - Path=/api/v1/asignaturas/**
 
             - id: unidades
-              uri: http://unidades_service:8084
+              uri: http://unidades-service:8084
               predicates:
                 - Path=/api/v1/unidades/**
 
             - id: profesores
-              uri: http://profesores_service:8085
+              uri: http://profesores-service:8085
               predicates:
                 - Path=/api/v1/profesores/**
 
             - id: grupos
-              uri: http://grupos_service:8086
+              uri: http://grupos-service:8086
               predicates:
                 - Path=/api/v1/grupos/**
 
             - id: integrantes
-              uri: http://integrantes_service:8087
+              uri: http://integrantes-service:8087
               predicates:
                 - Path=/api/v1/integrantes/**
 
             - id: roles
-              uri: http://roles_service:8088
+              uri: http://roles-service:8088
               predicates:
                 - Path=/api/v1/roles/**
 
             - id: secciones
-              uri: http://secciones_service:8089
+              uri: http://secciones-service:8089
               predicates:
                 - Path=/api/v1/secciones/**
 
             - id: trabajos
-              uri: http://trabajos_service:8090
+              uri: http://trabajos-service:8090
               predicates:
                 - Path=/api/v1/trabajos/**
 
             - id: entregas
-              uri: http://entregas_service:8091
+              uri: http://entregas-service:8091
               predicates:
                 - Path=/api/v1/entregas/**
 
             - id: comentarios
-              uri: http://comentarios_service:8092
+              uri: http://comentarios-service:8092
               predicates:
                 - Path=/api/v1/comentarios/**
 eureka:
