@@ -15,7 +15,7 @@ spring:
                 - Path=/api/v1/notas/**
 
             - id: ponderaciones
-              uri: http://ponderaciones-service:8083
+              uri: http://notas-service:8083
               predicates:
                 - Path=/api/v1/ponderaciones/**
 
@@ -25,7 +25,7 @@ spring:
                 - Path=/api/v1/asignaturas/**
 
             - id: unidades
-              uri: http://unidades-service:8084
+              uri: http://asignaturas-service:8084
               predicates:
                 - Path=/api/v1/unidades/**
 
